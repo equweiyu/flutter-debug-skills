@@ -3,11 +3,12 @@ name: android-device-database-inspection
 description: >-
   Inspect SQLite and SQLite-backed databases inside a debuggable Flutter app
   on a connected Android phone, tablet, or emulator through adb. Use when
-  locating, exporting, or querying a debug-app database, or diagnosing missing
-  or stale rows; do not use for non-debuggable production apps, remote
-  databases, or live mutation.
+  locating, exporting, or querying a debug-app database, diagnosing missing
+  or stale rows, or performing an explicitly requested scoped mutation. Keep
+  inspection read-only by default; do not use for non-debuggable production
+  apps, remote databases, or encrypted stores without their operational access.
 metadata:
-  short-description: Inspect local Android debug app databases
+  short-description: Inspect Android debug databases with guarded writes
   starchild:
     skillKey: android-device-database-inspection
     requires:
@@ -17,8 +18,26 @@ metadata:
 # Android 设备数据库检查
 
 通过 `adb` 检查已连接 Android 真机或模拟器中 debuggable App 的私有数据库。
-默认只将选定的数据库导出到本机临时目录并以只读方式查询；不要求 root，不修改
-设备数据库，也不读取无关凭据或个人数据。
+默认只读：只将选定的数据库导出到本机临时目录并以只读方式查询，不要求 root，也不读取
+无关凭据或个人数据。定位、导出、诊断和查询请求都不授权修改；只有当前请求明确
+指定了写入目标与变更，或用户确认了精确写入计划后，才可进入写入流程。
+
+## 写入授权门禁
+
+以下操作都视为写入或状态变更：`INSERT`、`UPDATE`、`DELETE`、`REPLACE`、
+架构变更、会写数据库的 `PRAGMA`、替换数据库文件、删除或改名 WAL/SHM、停止或
+重启 App，以及恢复备份。
+
+满足以下任一条件才能执行这些操作：
+
+- 当前请求明确授权了具体设备、应用、数据库、变更内容和预期结果。
+- 先向用户展示精确计划，并收到明确确认。计划至少包含设备序列号、application
+  ID、数据库相对路径、预检查询及预期行数、SQL、备份、App 停止/重启、WAL/SHM
+  处理、远程临时文件和恢复方式。
+
+一次确认只覆盖已经展示且没有实质变化的计划。目标、行数、SQL、写入文件、停止
+App 或恢复方式发生变化时，重新确认。用户只说“修一下”“把数据改对”或要求排查
+异常，不构成写入授权。非 debuggable App 始终不进入写入流程。
 
 ## 前置条件
 
@@ -156,7 +175,15 @@ sqlite3 -readonly -header -column "$SNAPSHOT" \
 Android Studio 的 **View > Tool Windows > App Inspection > Database Inspector**
 可连接 API 26 及以上的真机或模拟器检查运行中的普通 SQLite 数据库。它适合交互式
 浏览；Flutter 插件如果直接使用原生 SQLite，未必能被发现，此时仍以 `adb` 文件
-导出为准。
+导出为准。使用 GUI 修改表值同样必须满足写入门禁，且修改后仍需验证 App 缓存、
+业务状态和异常日志。
+
+## 显式写入
+
+满足写入门禁、确认目标为 debuggable App 中的普通 SQLite，并完成只读预检后，
+读取 [references/mutation.md](references/mutation.md)。写入会停止 App、创建
+设备内可回滚副本并将经过事务和完整性检查的本地数据库安全写回；不要用普通
+`adb push` 直接覆盖 App 私有目录。
 
 ## 安全与解释边界
 
@@ -166,11 +193,14 @@ Android Studio 的 **View > Tool Windows > App Inspection > Database Inspector**
   数据。
 - SQLCipher 等加密 SQLite 文件需要持有正确密钥才能查询；本技能不提供密钥提取。
 - Realm、Isar、ObjectBox、Hive 等非 SQLite 存储不能使用 `sqlite3` 查询。
-- 不提供把修改后的数据库写回设备、执行 `UPDATE`/`DELETE` 或删除 WAL/SHM 的流程。
+- 修改后的数据库只能通过已授权的
+  [references/mutation.md](references/mutation.md) 流程写回。不得绕过写入门禁，
+  直接把本地副本推送到 `/data/data` 或其他 App 私有目录。
 - 设备重启、App 重装、clear-data 或存储迁移后，重新解析实际数据库路径。
 
 ## 交付记录
 
 报告至少包含设备序列号或 emulator ID、application ID、远端相对路径、导出了哪些
-sidecar、导出是否为 best-effort 快照，以及实际执行的只读查询。其他内容按当前
-问题最小化输出。
+sidecar、导出是否为 best-effort 快照，以及实际执行的查询。发生写入时，还要报告
+已确认的 DML、`changed_rows`、备份与完整性检查、App 停止/重启状态和恢复结果。
+其他内容按当前问题最小化输出。

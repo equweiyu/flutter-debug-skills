@@ -1,3 +1,3 @@
 interface:
-  display_name: "Android 设备数据库检查"
-  short_description: "通过 adb 只读检查 Android 真机或模拟器中的 App 数据库"
+  display_name: "Android 调试数据库检查与写入"
+  short_description: "默认只读检查 Android 调试数据库，写入需显式授权"

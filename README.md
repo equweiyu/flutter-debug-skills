@@ -2,7 +2,7 @@
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
-Task-oriented agent skills for Flutter debugging, including read-only database inspection for iOS and Android.
+Task-oriented agent skills for Flutter debugging, including database inspection and explicitly authorized debug-data mutation for iOS Simulator and Android.
 
 ## Quick Start
 
@@ -34,9 +34,8 @@ Adjust the destination if your agent uses a different Skill directory.
 
 ### Platform Diagnostics
 
-- [Android Device Database Inspection](skills/android-device-database-inspection/SKILL.md): Export SQLite databases from a debuggable app on a connected Android device or emulator for read-only inspection.
-- [iOS Simulator Database Inspection](skills/ios-simulator-database-inspection/SKILL.md): Inspect iOS Simulator databases using read-only queries.
-- [iOS Physical-Device Database Inspection](skills/ios-physical-device-database-inspection/SKILL.md): Export selected app databases from a connected physical iOS device for read-only inspection.
+- [Android Device Database Inspection](skills/android-device-database-inspection/SKILL.md): Inspect SQLite databases in a debuggable app, with guarded mutations only after explicit authorization.
+- [iOS Database Inspection](skills/ios-database-inspection/SKILL.md): Inspect iOS app databases and perform explicitly authorized Simulator mutations with backup, validation, and recovery.
 
 ## Design Principles
 

@@ -2,7 +2,7 @@
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
-面向 Flutter 调试的任务型 Agent Skills，包含 iOS 与 Android 的只读数据库检查工具。
+面向 Flutter 调试的任务型 Agent Skills，包含 iOS 与 Android 的数据库检查，以及需要显式授权的调试数据修改流程。
 
 ## 快速开始
 
@@ -34,9 +34,8 @@ cp -R skills/* /path/to/flutter-project/.agents/skills/
 
 ### 平台诊断工具
 
-- [Android 设备数据库检查](skills/android-device-database-inspection/SKILL.md)：从已连接的 Android 真机或模拟器导出 debuggable App 的 SQLite 数据库并执行只读检查。
-- [iOS Simulator 数据库检查](skills/ios-simulator-database-inspection/SKILL.md)：对 iOS Simulator 数据库执行只读检查。
-- [iOS 真机数据库检查](skills/ios-physical-device-database-inspection/SKILL.md)：从已连接的物理 iOS 设备导出选定的 App 数据库并执行只读检查。
+- [Android 设备数据库检查](skills/android-device-database-inspection/SKILL.md)：检查 debuggable App 的 SQLite 数据库，仅在显式授权后执行带备份和校验的修改。
+- [iOS 模拟器与真机数据库检查](skills/ios-database-inspection/SKILL.md)：默认只读检查 iOS App 数据库，并支持经过显式授权的模拟器备份、修改、校验和恢复流程。
 
 ## 设计原则
 

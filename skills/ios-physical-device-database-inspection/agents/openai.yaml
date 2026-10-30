@@ -1,3 +1,0 @@
-interface:
-  display_name: "iOS 真机数据库检查"
-  short_description: "导出并只读检查已连接 iOS 真机中的 App 数据库"
