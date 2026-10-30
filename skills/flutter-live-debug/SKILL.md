@@ -37,7 +37,8 @@ metadata:
 
 - 先读取运行时异常，再判断是否需要 Widget Tree。
 - 通过 DTD 或 VM Service 确认 isolate、Flutter extension 和 Driver extension 是否可用。
-- Widget Tree 很大时只读取与目标页面、错误节点或 Key 相关的分支，不默认倾倒完整树。
+- 当前 Dart MCP 的 `get_widget_tree` 没有按 `valueId`、Key 或子树裁剪的参数；`summaryOnly=true` 仍可能返回整棵摘要树。
+- Widget Tree 很大或包含敏感业务文本时，优先依据运行时异常中的源码位置；需要目标节点时，请用户通过 DevTools 选中 Widget 后再用 `get_selected_widget`。不要为了缩小范围调用未文档化的 Inspector extension。
 - 普通 `developer.log` 事件使用 `flutter-live-console-logs`，不要用 `get_runtime_errors` 代替日志。
 - 结论中区分“已确认事实”和“推测”，记录 App 身份、命中的异常或节点，以及验证时间点。
 

@@ -27,7 +27,7 @@ Allowed methods:
   getVM
   getIsolate       {"isolateId":"isolates/..."}
   getClassList     {"isolateId":"isolates/..."}
-  getInstances     {"isolateId":"isolates/...","classId":"classes/...","limit":1..20}
+  getInstances     {"isolateId":"isolates/...","objectId":"classes/...","limit":1..20}
   getObject        {"isolateId":"isolates/...","objectId":"objects/..." }
   invoke           {"isolateId":"isolates/...","targetId":"objects/...","selector":"knownMethod","argIds":[]}
 
@@ -100,16 +100,18 @@ function validateParams(method, rawParams) {
   }
 
   if (method === 'getInstances') {
-    requireString(params.classId, 'classId');
-    if (!CLASS_ID.test(params.classId)) {
-      throw new Error('classId must have the form classes/<id>');
+    requireString(params.objectId, 'objectId');
+    if (!CLASS_ID.test(params.objectId)) {
+      throw new Error(
+        'objectId must reference a class with the form classes/<id>',
+      );
     }
     if (!Number.isInteger(params.limit) || params.limit < 1 || params.limit > 20) {
       throw new Error('limit must be an integer from 1 to 20');
     }
     return {
       isolateId: params.isolateId,
-      classId: params.classId,
+      objectId: params.objectId,
       limit: params.limit,
     };
   }

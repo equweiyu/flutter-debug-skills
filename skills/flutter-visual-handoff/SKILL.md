@@ -51,11 +51,32 @@ xcrun simctl io "$SIMULATOR_UDID" screenshot "$OUTPUT_PNG"
 Android 设备或模拟器：
 
 ```bash
-adb devices -l
+ADB_BIN="$(command -v adb || true)"
+if [ -z "$ADB_BIN" ]; then
+  ANDROID_SDK_DIR="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-}}"
+  if [ -z "$ANDROID_SDK_DIR" ]; then
+    ANDROID_SDK_DIR="$(
+      flutter doctor -v 2>/dev/null |
+        sed -n 's/^.*Android SDK at //p' |
+        head -n 1
+    )"
+  fi
+  if [ -n "$ANDROID_SDK_DIR" ] &&
+    [ -x "$ANDROID_SDK_DIR/platform-tools/adb" ]; then
+    ADB_BIN="$ANDROID_SDK_DIR/platform-tools/adb"
+  fi
+fi
+if [ -z "$ADB_BIN" ]; then
+  printf 'adb not found; configure ANDROID_HOME or ANDROID_SDK_ROOT\n' >&2
+  exit 1
+fi
+"$ADB_BIN" devices -l
 DEVICE_SERIAL='<目标设备序列号>'
 OUTPUT_PNG='<输出目录>/after.png'
-adb -s "$DEVICE_SERIAL" exec-out screencap -p > "$OUTPUT_PNG"
+"$ADB_BIN" -s "$DEVICE_SERIAL" exec-out screencap -p > "$OUTPUT_PNG"
 ```
+
+也可以预先设置 `ADB_BIN` 为已安装 `adb` 的绝对路径。不要猜测设备序列号；只使用 `devices -l` 中状态为 `device` 的目标。
 
 录屏优先使用现有 Flutter 工具；需要平台命令时先确认设备唯一，再开始录制，完成后停止录制并保存到同一目录。不要捕获或转述系统通知、账号信息和敏感用户内容。
 

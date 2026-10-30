@@ -19,9 +19,11 @@ Dart MCP 负责 DTD 发现、Driver 和 Widget Inspector，但不提供通用的
 getVM
 getIsolate { isolateId }
 getClassList { isolateId }
-getInstances { isolateId, classId, limit }
+getInstances { isolateId, objectId, limit }
 getObject { isolateId, objectId }
 ```
+
+`getInstances.objectId` 必须是目标类的 Class ID，例如 `classes/123`；不要传历史文档中的 `classId` 字段。
 
 示例：
 

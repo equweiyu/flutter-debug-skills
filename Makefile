@@ -16,6 +16,7 @@ analyze:
 
 test:
 	dart tests/capture_app_logs_test.dart
+	dart tests/vm_service_rpc_test.dart
 
 scripts:
 	@for file in $(NODE_FILES); do node --check "$$file"; done
