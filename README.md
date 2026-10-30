@@ -2,7 +2,7 @@
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
-Task-oriented agent skills for Flutter debugging. iOS database inspection is included as supporting platform tooling; Android tools will be added as the collection grows.
+Task-oriented agent skills for Flutter debugging, including read-only database inspection for iOS and Android.
 
 ## Quick Start
 
@@ -20,6 +20,7 @@ Adjust the destination if your agent uses a different Skill directory.
 - Flutter and Dart with DTD and VM Service available for runtime debugging.
 - Node.js 22 or later with the global `WebSocket` API for the VM Service control helper.
 - macOS and Xcode command-line tools for iOS skills; `sqlite3` is required for database inspection.
+- Android database inspection requires Android SDK Platform-Tools (`adb`) and `sqlite3`.
 - Use only local debug apps, explicit devices, and loopback debug endpoints.
 
 ## Skills
@@ -33,10 +34,9 @@ Adjust the destination if your agent uses a different Skill directory.
 
 ### Platform Diagnostics
 
+- [Android Device Database Inspection](skills/android-device-database-inspection/SKILL.md): Export SQLite databases from a debuggable app on a connected Android device or emulator for read-only inspection.
 - [iOS Simulator Database Inspection](skills/ios-simulator-database-inspection/SKILL.md): Inspect iOS Simulator databases using read-only queries.
 - [iOS Physical-Device Database Inspection](skills/ios-physical-device-database-inspection/SKILL.md): Export selected app databases from a connected physical iOS device for read-only inspection.
-
-Android platform tools are planned.
 
 ## Design Principles
 

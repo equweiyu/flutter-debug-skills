@@ -1,0 +1,3 @@
+interface:
+  display_name: "Android 设备数据库检查"
+  short_description: "通过 adb 只读检查 Android 真机或模拟器中的 App 数据库"

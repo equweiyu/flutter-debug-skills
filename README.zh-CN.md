@@ -2,7 +2,7 @@
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
-面向 Flutter 调试的任务型 Agent Skills。iOS 数据库检查属于辅助平台工具；后续会随技能集合扩充补充 Android 工具。
+面向 Flutter 调试的任务型 Agent Skills，包含 iOS 与 Android 的只读数据库检查工具。
 
 ## 快速开始
 
@@ -20,6 +20,7 @@ cp -R skills/* /path/to/flutter-project/.agents/skills/
 - Flutter 和 Dart，并确保运行态调试所需的 DTD 与 VM Service 可用。
 - Node.js 22 或更高版本，并支持全局 `WebSocket` API，供 VM Service 控制辅助脚本使用。
 - iOS 相关 Skill 需要 macOS 和 Xcode Command Line Tools；数据库检查还需要 `sqlite3`。
+- Android 数据库检查需要 Android SDK Platform-Tools（`adb`）和 `sqlite3`。
 - 只操作本机 Debug App、明确指定的设备，并使用回环调试地址。
 
 ## Skills
@@ -33,10 +34,9 @@ cp -R skills/* /path/to/flutter-project/.agents/skills/
 
 ### 平台诊断工具
 
+- [Android 设备数据库检查](skills/android-device-database-inspection/SKILL.md)：从已连接的 Android 真机或模拟器导出 debuggable App 的 SQLite 数据库并执行只读检查。
 - [iOS Simulator 数据库检查](skills/ios-simulator-database-inspection/SKILL.md)：对 iOS Simulator 数据库执行只读检查。
 - [iOS 真机数据库检查](skills/ios-physical-device-database-inspection/SKILL.md)：从已连接的物理 iOS 设备导出选定的 App 数据库并执行只读检查。
-
-后续计划补充 Android 平台工具。
 
 ## 设计原则
 
