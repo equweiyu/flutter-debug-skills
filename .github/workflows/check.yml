@@ -13,6 +13,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: 3.12.1
       - uses: actions/setup-node@v4
         with:
           node-version: 22
