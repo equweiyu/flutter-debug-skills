@@ -1,0 +1,3 @@
+interface:
+  display_name: "Flutter 控制台日志"
+  short_description: "采集和回放运行中 Flutter App 的日志"

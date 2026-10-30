@@ -1,0 +1,11 @@
+.DS_Store
+.dart_tool/
+.env
+.env.*
+!.env.example
+.idea/
+.vscode/
+.planning/
+.serena/
+.tmp/
+*.log

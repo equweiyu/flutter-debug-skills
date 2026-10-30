@@ -1,0 +1,3 @@
+interface:
+  display_name: "iOS Simulator 数据库检查"
+  short_description: "对 iOS Simulator 中的 App 数据库执行只读检查"

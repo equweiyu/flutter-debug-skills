@@ -1,0 +1,3 @@
+interface:
+  display_name: "Flutter 视觉验收交付"
+  short_description: "Flutter 视觉交付，支持按需内联查看"

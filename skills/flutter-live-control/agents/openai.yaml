@@ -1,0 +1,3 @@
+interface:
+  display_name: "Flutter 运行态控制"
+  short_description: "开发和验证时操作运行中的 Flutter App"

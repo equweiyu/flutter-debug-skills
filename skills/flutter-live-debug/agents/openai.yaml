@@ -1,0 +1,3 @@
+interface:
+  display_name: "Flutter 运行态诊断"
+  short_description: "诊断并热重载正在运行的 Flutter App"
