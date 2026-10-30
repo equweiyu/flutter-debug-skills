@@ -6,7 +6,46 @@
 
 ## 快速开始
 
-将 Skill 目录复制到 Flutter 项目，然后让 Agent 重新加载或发现它们：
+### 使用 Skills CLI 安装
+
+请在 Flutter 项目根目录执行以下命令，从 GitHub 使用 Skills CLI 安装：
+
+```bash
+npx skills add equweiyu/flutter-debug-skills
+```
+
+命令默认安装到当前项目，并在需要时提示选择目标 Agent。安装前可以先查看仓库中可用的 Skill：
+
+```bash
+npx skills add equweiyu/flutter-debug-skills --list
+```
+
+安装仓库中的全部 Skill，或按名称安装指定 Skill：
+
+```bash
+npx skills add equweiyu/flutter-debug-skills --skill '*'
+npx skills add equweiyu/flutter-debug-skills --skill flutter-live-debug
+```
+
+添加 `-g` 可以安装到当前用户目录，而不是当前项目：
+
+```bash
+npx skills add equweiyu/flutter-debug-skills --skill '*' -g
+```
+
+安装后，让 Agent 重新加载或发现 Skill。可以使用 `npx skills list` 检查项目级安装，或使用 `npx skills list -g` 检查用户级安装。
+
+### 交给 AI Agent 安装
+
+将下面这段提示词交给有终端访问权限的 AI 编码 Agent：
+
+```text
+请使用 Skills CLI 将 GitHub 仓库 equweiyu/flutter-debug-skills 中的全部 Skill 安装到当前 Flutter 项目。在项目根目录运行 `npx skills add equweiyu/flutter-debug-skills --skill '*' -y`，并将你当前运行的 AI Agent 作为安装目标。使用 `npx skills list` 验证安装结果，并报告失败项。不要修改项目源文件。
+```
+
+### 手动安装
+
+如果无法使用 Skills CLI，可以将 Skill 目录复制到 Flutter 项目，然后让 Agent 重新加载或发现它们：
 
 ```bash
 mkdir -p /path/to/flutter-project/.agents/skills

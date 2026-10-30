@@ -6,7 +6,46 @@ Task-oriented agent skills for Flutter debugging, including database inspection 
 
 ## Quick Start
 
-Copy the skill directories into your Flutter project, then reload or rediscover them in your agent:
+### Use the Skills CLI
+
+Run these commands from the root of your Flutter project. Install from GitHub with the Skills CLI:
+
+```bash
+npx skills add equweiyu/flutter-debug-skills
+```
+
+The command installs at project scope by default and prompts for choices when needed. To inspect the available skills without installing them:
+
+```bash
+npx skills add equweiyu/flutter-debug-skills --list
+```
+
+Install all skills from this repository, or select one by name:
+
+```bash
+npx skills add equweiyu/flutter-debug-skills --skill '*'
+npx skills add equweiyu/flutter-debug-skills --skill flutter-live-debug
+```
+
+Add `-g` to install for the current user instead of the current project:
+
+```bash
+npx skills add equweiyu/flutter-debug-skills --skill '*' -g
+```
+
+After installation, reload or rediscover skills in your agent. You can verify project-level installations with `npx skills list`, or user-level installations with `npx skills list -g`.
+
+### Ask an AI Agent to Install
+
+Paste this prompt into an AI coding agent with terminal access:
+
+```text
+Install all skills from the GitHub repository equweiyu/flutter-debug-skills into the current Flutter project using the Skills CLI. From the project root, run `npx skills add equweiyu/flutter-debug-skills --skill '*' -y`, targeting the AI agent you are running in. Verify the installation with `npx skills list` and report any failures. Do not modify the project source files.
+```
+
+### Install Manually
+
+If the Skills CLI is unavailable, copy the skill directories into your Flutter project, then reload or rediscover them in your agent:
 
 ```bash
 mkdir -p /path/to/flutter-project/.agents/skills
