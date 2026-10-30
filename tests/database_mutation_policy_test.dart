@@ -56,10 +56,10 @@ void main() {
 
   _test('guards Android database mutation', () {
     final skillFile = File(
-      '${skillsDirectory.path}/android-device-database-inspection/SKILL.md',
+      '${skillsDirectory.path}/android-database-inspection/SKILL.md',
     );
     final mutationReference = File(
-      '${skillsDirectory.path}/android-device-database-inspection/'
+      '${skillsDirectory.path}/android-database-inspection/'
       'references/mutation.md',
     );
 
@@ -94,7 +94,7 @@ void main() {
 
   _test('orders mutation steps to avoid stale snapshots and overwrites', () {
     final androidMutation = File(
-      '${skillsDirectory.path}/android-device-database-inspection/'
+      '${skillsDirectory.path}/android-database-inspection/'
       'references/mutation.md',
     ).readAsStringSync();
     final forceStop = androidMutation.indexOf('am force-stop');

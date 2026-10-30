@@ -73,7 +73,7 @@ cp -R skills/* /path/to/flutter-project/.agents/skills/
 
 ### 平台诊断工具
 
-- [Android 设备数据库检查](skills/android-device-database-inspection/SKILL.md)：检查 debuggable App 的 SQLite 数据库，仅在显式授权后执行带备份和校验的修改。
+- [Android 数据库检查](skills/android-database-inspection/SKILL.md)：检查 debuggable App 的 SQLite 数据库，仅在显式授权后执行带备份和校验的修改。
 - [iOS 模拟器与真机数据库检查](skills/ios-database-inspection/SKILL.md)：默认只读检查 iOS App 数据库，并支持经过显式授权的模拟器备份、修改、校验和恢复流程。
 
 ## 设计原则

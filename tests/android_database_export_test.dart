@@ -4,7 +4,7 @@ Future<void> main() async {
   final repositoryRoot = File.fromUri(Platform.script).parent.parent;
   final script = File(
     '${repositoryRoot.path}/'
-    'skills/android-device-database-inspection/scripts/'
+    'skills/android-database-inspection/scripts/'
     'export_android_database.sh',
   );
 

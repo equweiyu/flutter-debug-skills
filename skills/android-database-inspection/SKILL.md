@@ -1,5 +1,5 @@
 ---
-name: android-device-database-inspection
+name: android-database-inspection
 description: >-
   Inspect SQLite and SQLite-backed databases inside a debuggable Flutter app
   on a connected Android phone, tablet, or emulator through adb. Use when
@@ -10,12 +10,12 @@ description: >-
 metadata:
   short-description: Inspect Android debug databases with guarded writes
   starchild:
-    skillKey: android-device-database-inspection
+    skillKey: android-database-inspection
     requires:
       bins: [adb, sqlite3]
 ---
 
-# Android 设备数据库检查
+# Android 数据库检查
 
 通过 `adb` 检查已连接 Android 真机或模拟器中 debuggable App 的私有数据库。
 默认只读：只将选定的数据库导出到本机临时目录并以只读方式查询，不要求 root，也不读取

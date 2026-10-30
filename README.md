@@ -73,7 +73,7 @@ Adjust the destination if your agent uses a different Skill directory.
 
 ### Platform Diagnostics
 
-- [Android Device Database Inspection](skills/android-device-database-inspection/SKILL.md): Inspect SQLite databases in a debuggable app, with guarded mutations only after explicit authorization.
+- [Android Database Inspection](skills/android-database-inspection/SKILL.md): Inspect SQLite databases in a debuggable app, with guarded mutations only after explicit authorization.
 - [iOS Database Inspection](skills/ios-database-inspection/SKILL.md): Inspect iOS app databases and perform explicitly authorized Simulator mutations with backup, validation, and recovery.
 
 ## Design Principles
