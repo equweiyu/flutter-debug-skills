@@ -1,18 +1,37 @@
 ---
 name: flutter-visual-handoff
 description: >-
-  Capture screenshots or recordings of a running Flutter app for visual
-  handoff. Default to local file paths without viewing image content; show
-  artifacts inline or inspect the evidence needed for diagnosis only when the
-  user requests it. Use for visual acceptance; do not use for Widget/Golden
-  tests, automated pixel comparison, or source assets.
+  Create screenshot or recording handoff artifacts only when the user explicitly
+  requests visual review or handoff, or when the reviewer cannot access the
+  running app. Use for final visual acceptance evidence, before/after
+  comparisons, and animation review. Do not use for ordinary UI implementation
+  or fix verification when the user can already see the same live simulator;
+  use live debug or live control instead.
 metadata:
   short-description: Hand off Flutter visuals with optional inline review
 ---
 
 # Flutter 视觉验收交付
 
-当动画、转场、间距、颜色、层级或图标位置需要最终验收时，默认生成本地截图或录屏文件并交给用户查看。只有用户明确要求 Agent 看图或分析视觉问题时，才把判断所需的视觉证据读取到上下文。
+## 触发边界
+
+使用：
+
+- 用户明确要求截图、录屏、视觉对比或视觉交接
+- 验收者无法访问当前模拟器或真机
+- 需要留下持久的验收证据
+- 用户明确要求 Agent 分析视觉问题
+
+不使用：
+
+- 用户正在同一模拟器或真机上实时调试
+- 普通 UI 实现或修复，只需要热重载、日志、静态检查和测试
+- 用户可以直接观察当前页面，也没有要求生成文件
+- Widget/Golden 测试
+
+上述不使用场景交由 `flutter-live-debug` 或 `flutter-live-control` 完成。仅当任一使用条件成立时，才进入后续截图或录屏流程。
+
+当满足上述触发条件，且动画、转场、间距、颜色、层级或图标位置需要最终验收时，生成本地截图或录屏文件并交给用户查看。只有用户明确要求 Agent 看图或分析视觉问题时，才把判断所需的视觉证据读取到上下文。
 
 ## 默认策略与例外
 

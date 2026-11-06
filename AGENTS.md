@@ -32,6 +32,12 @@ Follow `.editorconfig`: UTF-8, LF line endings, two-space indentation, a final n
 
 There is no external test framework or coverage target yet. Run the standalone Dart regression tests before live-environment testing. Test behavior changes against an isolated Flutter debug app, simulator, or explicitly identified device. Record prerequisites, commands, expected results, and affected platform versions. Never use real user activity, credentials, or destructive database operations as test data.
 
+## Visual Verification and Handoff
+
+Use `flutter-live-debug` or `flutter-live-control` for ordinary UI implementation or fix verification. Generate screenshot or recording artifacts only when the user explicitly requests visual review or handoff, when the reviewer cannot access the running app, or when persistent acceptance evidence is needed.
+
+When the user is actively debugging on the same simulator or device and can directly observe the result, do not automatically generate screenshots or recordings. Generate them only when the user explicitly requests visual handoff or visual analysis, or when the running environment cannot be shared.
+
 ## Commit & Pull Request Guidelines
 
 Use short imperative commit subjects and optional scoped prefixes, such as `feat(flutter-live-debug): add hot reload checks`. Pull requests should describe the affected skills, list validation performed, identify required tools or devices, link related issues, and include screenshot or recording paths for visual changes.
