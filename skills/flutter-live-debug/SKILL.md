@@ -12,12 +12,12 @@ metadata:
 
 # Flutter 运行态诊断
 
-在不重新启动 App 的前提下定位当前 Flutter Debug App，并读取运行态证据。默认只读；只有用户要求或当前验证确实需要时才热重载或热重启。
+在不重新启动 App 的前提下定位当前 Flutter Debug App，并读取运行态证据。运行时验证优先使用定向静态分析、相关单元或 Widget 测试、DTD 热重载和运行时错误检查。本 Skill 默认只读；只有用户要求或当前验证确实需要时才热重载或热重启。
 
 ## 职责边界
 
 - 只处理本机、当前工作区的 Debug App。
-- 日志采集交给 `flutter-live-console-logs`；点击、输入、滚动或 Controller 调用交给 `flutter-live-control`；截图和录屏交给 `flutter-visual-handoff`。
+- 日志采集交给 `flutter-live-console-logs`；点击、输入、滚动或 Controller 调用交给 `flutter-live-control`；截图和录屏交给 `flutter-visual-handoff`。调用截图、`view_image`、Computer Use 或视觉模型前，必须取得用户明确授权。
 - 不在承载真实用户数据的主要设备上安装、卸载或启动 Flutter Driver。热重载会重新执行应用代码，必须确认目标 App 不含正在进行的高风险或不可恢复操作。
 - VM Service 只能使用回环地址 `127.0.0.1`。禁止绑定 `0.0.0.0`、连接局域网地址或转发调试端口。
 - 不输出 VM Service token、密码、凭据、密钥材料、签名载荷或其他敏感数据。
@@ -33,11 +33,20 @@ metadata:
 
 ## 读取运行态证据
 
-按当前 MCP schema 使用最小范围读取：
+### 低成本读取顺序
 
-- 先读取运行时异常，再判断是否需要 Widget Tree。
+1. 先检查运行时错误，再判断是否需要读取更多 UI 信息。
+2. 如果 DevTools 已有选中节点，优先使用 `get_selected_widget`。
+3. 如果只需要确认当前可见文本、控件类型或坐标，不要直接读取完整 Widget Tree；应按 `flutter-live-control` Skill 的 IDB 通道，使用 Accessibility Tree 精简读取。
+4. 只有需要 Flutter Widget 类名、组件层级、状态关系或具体布局节点时，才调用 `get_widget_tree`。
+5. 调用完整 `get_widget_tree` 前，先说明输出可能较大。如果当前任务只需要读取少量可见内容，应停止使用完整 Widget Tree，改用 IDB Accessibility Tree。
+6. IDB Accessibility Tree 的读取属于只读诊断。跨到 `flutter-live-control` 读取层级不表示已获授权执行点击、输入或导航；只有当前任务确实需要改变 UI 状态时才执行这些操作。
+
+当前 Dart MCP 的 `get_widget_tree` 没有按 `valueId`、Key 或子树裁剪的参数；`summaryOnly=true` 仍可能返回整棵摘要树，不能视为低成本查询。
+
+补充检查：
+
 - 通过 DTD 或 VM Service 确认 isolate、Flutter extension 和 Driver extension 是否可用。
-- 当前 Dart MCP 的 `get_widget_tree` 没有按 `valueId`、Key 或子树裁剪的参数；`summaryOnly=true` 仍可能返回整棵摘要树。
 - Widget Tree 很大或包含敏感业务文本时，优先依据运行时异常中的源码位置；需要目标节点时，请用户通过 DevTools 选中 Widget 后再用 `get_selected_widget`。不要为了缩小范围调用未文档化的 Inspector extension。
 - 普通 `developer.log` 事件使用 `flutter-live-console-logs`，不要用 `get_runtime_errors` 代替日志。
 - 结论中区分“已确认事实”和“推测”，记录 App 身份、命中的异常或节点，以及验证时间点。

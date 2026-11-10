@@ -13,7 +13,7 @@ metadata:
 
 # Flutter 运行态控制
 
-在开发、复现或验证 Flutter UI 时，操作当前运行中的 Debug App。先确认能力通道，再执行最小、可恢复的操作；Driver 不可用不等于必须停止，可以按目标切换 IDB 或受限 VM Service。
+在开发、复现或验证 Flutter UI 时，操作当前运行中的 Debug App。运行时验证优先使用定向静态分析、相关单元或 Widget 测试、DTD 热重载和运行时错误检查；只有这些证据不足以验证 UI 行为时，才执行最小、可恢复的操作。先确认能力通道，Driver 不可用不等于必须停止，可以按目标切换 IDB 或受限 VM Service。
 
 ## 任务授权
 
@@ -32,6 +32,7 @@ Flutter Driver 是例外：首次使用、切换目标设备或切换启动方�
 ## 边界
 
 - 只控制本机 Debug App，连接不离开回环地址。
+- 调用截图、`view_image`、Computer Use 或视觉模型前，必须取得用户明确授权；优先依靠 UI 层级、运行时状态和测试验证。
 - 不把运行态操作固化成 `integration_test`、Widget Test 或永久 Driver 配置。
 - 不通过运行态控制改变生产数据或用 mock 结果伪造成功。验证需要特殊数据时，优先使用现有 Debug 配置和可恢复的安全状态。
 - Flutter Driver 只能用于用户确认过的设备和启动方式；同一任务内，同一设备和启动方式的一次确认可覆盖后续操作。切换设备或启动方式时需要重新确认；未获得确认时，继续使用当前 App 可用的 DTD、IDB 或受限 VM Service。
@@ -55,6 +56,18 @@ Flutter Driver 是例外：首次使用、切换目标设备或切换启动方�
    DEVICE_UDID='<已确认的目标设备 UDID>'
    idb ui describe-all --udid "$DEVICE_UDID"
    ```
+
+   当只需要读取当前可见文本、控件类型或精简节点列表时，使用 Accessibility Tree 的低输出筛选，避免把整棵树留在上下文中：
+
+   ```bash
+   idb ui describe-all --udid "$DEVICE_UDID" \
+     | jq -r '.[] |
+         select(.AXLabel != null or .AXValue != null) |
+         [.type, (.AXLabel // ""), (.AXValue // "")] |
+         @tsv'
+   ```
+
+   该读取本身是只读诊断。如果定位点击仍需要坐标，只从匹配语义节点的条目中读取 `frame` 或 bounds，不要为了少量可见内容调用完整 Widget Tree。只有当前任务确实需要改变页面状态时，才继续执行点击、输入或导航。
 
    优先使用 `idb ui tap` 点击已从 UI 层级确认的元素，使用 `idb ui text` 输入普通测试文本。不要根据截图猜测坐标，也不要操作支付、认证、敏感写入或凭据相关控件。
 
@@ -81,7 +94,7 @@ Driver 通道：
 
 IDB 通道：
 
-- 使用 `describe-all` 的语义标签、类型和 bounds 定位，不凭经验直接猜坐标。
+- 使用 IDB Accessibility Tree 的语义标签、类型和 bounds 定位，不凭经验直接猜坐标；只读取少量可见内容时，优先使用上面的 `jq` 精简输出。
 - 操作前确认目标文本、按钮状态和目标设备均与当前任务一致。
 - 点击、输入后重新读取 UI 或通过 DTD 验证页面状态；不要连续快速点击造成重复提交。
 - 涉及滚动时先读取当前 UI 层级，选择可见容器并限制滚动次数。
